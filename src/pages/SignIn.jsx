@@ -1,19 +1,20 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 //bootstrap
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-
 // context
 import { useFirebase } from "../context/Firebase";
+//router
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const SignIn = () => {
   //    States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   //   firebase context
   const firebase = useFirebase();
+  console.log(firebase.isSignedin);
 
   //FOR LOG in actions
   const navigate = useNavigate();
@@ -24,12 +25,18 @@ const Register = () => {
   // Functions
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Creating user...");
-    await firebase.createUser(email, password);
-    console.log("Creating user Success...");
+    console.log("Signing in user...");
+    const result = await firebase.signInUser(email, password);
+    console.log("Sign in user Success...", result);
   };
 
-  //   Register component
+  const handleClick = async () => {
+    console.log("Signing in with google...");
+    const result = await firebase.signInWithGoogle();
+    console.log("Signing in with google Success...");
+  };
+
+  //   SignIn component
   return (
     <div className='container mt-4'>
       <Form onSubmit={handleSubmit}>
@@ -59,11 +66,17 @@ const Register = () => {
         <Button
           variant='success'
           type='submit'>
-          Register
+          Sign In
         </Button>
       </Form>
+      <h3 className='mt-3 mb-3'>OR</h3>
+      <Button
+        onClick={handleClick}
+        variant='danger'>
+        Sign in with Google
+      </Button>
     </div>
   );
 };
 
-export default Register;
+export default SignIn;
