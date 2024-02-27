@@ -1,5 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { createContext, useContext, useEffect, useState } from "react";
+
+//firebase imports
+//authentication
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -8,6 +11,9 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from "firebase/auth";
+//firestore, storage
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const FirebaseContext = createContext(null);
 export const useFirebase = () => useContext(FirebaseContext);
@@ -25,6 +31,8 @@ const firebaseConfig = {
 const firebaseapp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseapp);
 const googleProvider = new GoogleAuthProvider();
+const storage = getStorage(firebaseapp);
+const firestore = getFirestore(firebaseapp);
 
 export const FirebaseProvider = (props) => {
   // to check weather user logged in or not
@@ -43,10 +51,30 @@ export const FirebaseProvider = (props) => {
   const signInWithGoogle = () => {
     return signInWithPopup(firebaseAuth, googleProvider);
   };
+  const createListing = async (name, isbn, cover, price) => {
+    const imageRef = ref(storage, `uploads/images/${Date.now()}-${cover.name}`);
+    const uploadResult = await uploadBytes(imageRef, cover);
+    return addDoc(collection(firestore, "books"), {
+      name,
+      isbn,
+      price,
+      coverURL: uploadResult.ref._location.path,
+      userName: user.displayName,
+      userEmail: user.email,
+      userPhoto: user.photoURL,
+      userID: user.uid,
+    });
+  };
   const isSignedin = user ? true : false;
   return (
     <FirebaseContext.Provider
-      value={{ createUser, signInUser, signInWithGoogle, isSignedin }}>
+      value={{
+        createUser,
+        signInUser,
+        signInWithGoogle,
+        isSignedin,
+        createListing,
+      }}>
       {props.children}
     </FirebaseContext.Provider>
   );

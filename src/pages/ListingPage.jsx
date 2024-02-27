@@ -19,9 +19,9 @@ const ListingPage = () => {
 
   // Functions
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     // console.log("Creating user...");
-    // await firebase.createUser(email, password);
+    await firebase.createListing(name, isbn, cover, price);
     // console.log("Creating user Success...");
   };
 
@@ -59,7 +59,7 @@ const ListingPage = () => {
           <Form.Control
             type='file'
             onChange={(e) => setCover(e.target.files[0])}
-            value={cover}
+            // value={cover}
           />
         </Form.Group>
         <Form.Group
