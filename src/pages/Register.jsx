@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //bootstrap
 import Button from "react-bootstrap/Button";
@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 
 // context
 import { useFirebase } from "../context/Firebase";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   //    States
