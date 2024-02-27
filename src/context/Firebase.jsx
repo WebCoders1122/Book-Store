@@ -10,6 +10,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 //firestore, storage
 import { getFirestore, collection, addDoc } from "firebase/firestore";
@@ -48,6 +49,9 @@ export const FirebaseProvider = (props) => {
   const signInUser = (email, password) => {
     return signInWithEmailAndPassword(firebaseAuth, email, password);
   };
+  const signOutUser = () => {
+    return signOut(firebaseAuth);
+  };
   const signInWithGoogle = () => {
     return signInWithPopup(firebaseAuth, googleProvider);
   };
@@ -72,6 +76,7 @@ export const FirebaseProvider = (props) => {
         createUser,
         signInUser,
         signInWithGoogle,
+        signOutUser,
         isSignedin,
         createListing,
       }}>

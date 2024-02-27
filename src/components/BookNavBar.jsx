@@ -3,8 +3,10 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-
+import { Button } from "react-bootstrap";
+import { useFirebase } from "../context/Firebase";
 const BookNavBar = () => {
+  const firebase = useFirebase();
   return (
     <Navbar
       expand='lg'
@@ -23,6 +25,14 @@ const BookNavBar = () => {
               <NavDropdown.Item href='/register'>Register</NavDropdown.Item>
             </NavDropdown>
           </Nav>
+          {firebase.isSignedin ? (
+            <Button
+              className='m-2'
+              variant='danger'
+              onClick={firebase.signOutUser}>
+              Sign Out
+            </Button>
+          ) : null}
         </Navbar.Collapse>
       </Container>
     </Navbar>
