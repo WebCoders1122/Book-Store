@@ -13,8 +13,15 @@ import {
   signOut,
 } from "firebase/auth";
 //firestore, storage
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const FirebaseContext = createContext(null);
 export const useFirebase = () => useContext(FirebaseContext);
@@ -69,6 +76,12 @@ export const FirebaseProvider = (props) => {
       userID: user.uid,
     });
   };
+  const getListingData = async () => {
+    return await getDocs(collection(firestore, "books"));
+  };
+  const getImageURL = (path) => {
+    return getDownloadURL(ref(storage, path));
+  };
   const isSignedin = user ? true : false;
   return (
     <FirebaseContext.Provider
@@ -79,6 +92,8 @@ export const FirebaseProvider = (props) => {
         signOutUser,
         isSignedin,
         createListing,
+        getListingData,
+        getImageURL,
       }}>
       {props.children}
     </FirebaseContext.Provider>

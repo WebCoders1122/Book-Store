@@ -12,6 +12,7 @@ import BookNavBar from "./components/BookNavBar";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import ListingPage from "./pages/ListingPage";
+import HomePage from "./pages/HomePage";
 
 const App = () => {
   return (
@@ -20,7 +21,7 @@ const App = () => {
       <Routes>
         <Route
           path='/'
-          element={<h3>Home page</h3>}
+          element={<HomePage />}
         />
         <Route
           path='/register'
