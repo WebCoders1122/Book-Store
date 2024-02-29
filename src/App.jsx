@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import ListingPage from "./pages/ListingPage";
 import HomePage from "./pages/HomePage";
+import BookDetails from "./pages/BookDetails";
 
 const App = () => {
   return (
@@ -34,6 +35,10 @@ const App = () => {
         <Route
           path='/book/list'
           element={<ListingPage />}
+        />
+        <Route
+          path='/book/:bookId'
+          element={<BookDetails />}
         />
       </Routes>
     </div>

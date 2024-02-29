@@ -13,10 +13,12 @@ const HomePage = () => {
     <div className='container'>
       <CardGroup>
         {books.map((book) => {
+          console.log(book);
           return (
             <BookCard
               book={book.data()}
               key={book.id}
+              id={book.id}
             />
           );
         })}

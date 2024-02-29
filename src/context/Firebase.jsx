@@ -82,6 +82,10 @@ export const FirebaseProvider = (props) => {
   const getImageURL = (path) => {
     return getDownloadURL(ref(storage, path));
   };
+  const getDocByID = async (id) => {
+    const ref = doc(firestore, "books", id);
+    return await getDoc(ref);
+  };
   const isSignedin = user ? true : false;
   return (
     <FirebaseContext.Provider
@@ -94,6 +98,7 @@ export const FirebaseProvider = (props) => {
         createListing,
         getListingData,
         getImageURL,
+        getDocByID,
       }}>
       {props.children}
     </FirebaseContext.Provider>
