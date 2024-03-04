@@ -16,7 +16,8 @@ const BookNavBar = () => {
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='me-auto'>
-            <Nav.Link href='/book/list'>List</Nav.Link>
+            <Nav.Link href='/books/list'>List</Nav.Link>
+            <Nav.Link href='/books/orders'>orders</Nav.Link>
             <NavDropdown
               title='User Area'
               id='basic-nav-dropdown'>

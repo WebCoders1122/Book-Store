@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { useFirebase } from "../context/Firebase";
 import { useNavigate } from "react-router-dom";
 
-const BookCard = ({ book, id }) => {
+const BookCard = ({ book, id, link }) => {
   const firebase = useFirebase();
   const [imgURL, setImgURL] = useState(null);
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const BookCard = ({ book, id }) => {
   }, []);
   return (
     <Card
-      style={{ width: "18rem" }}
+      style={{ width: "18rem", minWidth: "30%" }}
       className='m-5'>
       <Card.Img
         variant='top'
@@ -27,7 +27,7 @@ const BookCard = ({ book, id }) => {
         </Card.Text>
         <Button
           variant='success'
-          onClick={() => navigate("/book/" + id)}>
+          onClick={() => navigate(link)}>
           View Details
         </Button>
       </Card.Body>

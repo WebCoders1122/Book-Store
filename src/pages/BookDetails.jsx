@@ -2,24 +2,41 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useFirebase } from "../context/Firebase";
 import { useState } from "react";
+
+//bootstrap imports
 import { Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 const BookDetails = () => {
+  //book details and url
   const [book, setBook] = useState(null);
   const [URL, setURL] = useState("");
+
+  //firebase hook and parameters by react router dom
   const firebase = useFirebase();
   const params = useParams();
+
+  // for getting book details
   useEffect(() => {
     let result = firebase
       .getDocByID(params.bookId)
       .then((book) => setBook(book.data()));
   }, []);
+
+  // for getting book url
   useEffect(() => {
     book
       ? firebase.getImageURL(book.coverURL).then((url) => setURL(url))
       : null;
-    console.log(book);
   }, [book]);
+
+  // handeling orders
+  const [quantity, setQuantity] = useState(0);
+  const handleOrder = () => {
+    let result = firebase.placeBookOrder(params.bookId, quantity);
+  };
+
+  // conditional rendering of book detail page
   if (book === null) {
     return <h1>leading..</h1>;
   } else {
@@ -54,7 +71,23 @@ const BookDetails = () => {
           <b>Email: </b>
           {book.userEmail}
         </p>
-        <Button variant='success'>Buy Now</Button>
+        {/* for quantity */}
+        <Form.Group
+          className='mb-3'
+          controlId='forQuantity'>
+          <Form.Label>Quantity</Form.Label>
+          <Form.Control
+            type='number'
+            placeholder='Enter Quantity'
+            onChange={(e) => setQuantity(e.target.value)}
+            value={quantity}
+          />
+        </Form.Group>
+        <Button
+          variant='success'
+          onClick={handleOrder}>
+          Buy Now
+        </Button>
       </div>
     );
   }

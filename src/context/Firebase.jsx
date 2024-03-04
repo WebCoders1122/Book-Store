@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { createContext, useContext, useEffect, useState } from "react";
 
 //firebase imports
+
 //authentication
 import {
   getAuth,
@@ -12,6 +13,7 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
+
 //firestore, storage
 import {
   getFirestore,
@@ -20,12 +22,17 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
+  where,
 } from "firebase/firestore";
+
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+//firebase context
 const FirebaseContext = createContext(null);
 export const useFirebase = () => useContext(FirebaseContext);
 
+// app configuration for firebase app
 const firebaseConfig = {
   apiKey: "AIzaSyADkNd-7OsztV-y6HXMRx1SiEnjRZAZFYM",
   authDomain: "book-store-49549.firebaseapp.com",
@@ -47,9 +54,16 @@ export const FirebaseProvider = (props) => {
   const [user, setUser] = useState(null);
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
-      user ? setUser(user) : setUser(null);
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
     });
   }, []);
+  // console.log(user);
+
+  //user authentication
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(firebaseAuth, email, password);
   };
@@ -62,6 +76,8 @@ export const FirebaseProvider = (props) => {
   const signInWithGoogle = () => {
     return signInWithPopup(firebaseAuth, googleProvider);
   };
+
+  // book details and listings
   const createListing = async (name, isbn, cover, price) => {
     const imageRef = ref(storage, `uploads/images/${Date.now()}-${cover.name}`);
     const uploadResult = await uploadBytes(imageRef, cover);
@@ -79,14 +95,45 @@ export const FirebaseProvider = (props) => {
   const getListingData = async () => {
     return await getDocs(collection(firestore, "books"));
   };
+
+  // image url and data
   const getImageURL = (path) => {
     return getDownloadURL(ref(storage, path));
   };
+
+  // book redndering by id
   const getDocByID = async (id) => {
     const ref = doc(firestore, "books", id);
     return await getDoc(ref);
   };
+
+  const getBooksByQuery = async () => {
+    if (!user) return null;
+    const collectionRef = collection(firestore, "books");
+    const q = query(collectionRef, where("userID", "==", user.uid));
+    return await getDocs(q);
+  };
+
+  // order placement
+  const placeBookOrder = async (bookId, quantity) => {
+    const orderRef = collection(firestore, "books", bookId, "orders");
+    const result = await addDoc(orderRef, {
+      userName: user.displayName,
+      userEmail: user.email,
+      userPhoto: user.photoURL,
+      userID: user.uid,
+      quantity: +quantity,
+    });
+  };
+
+  const getOrdersByID = async (bookID) => {
+    const docRef = collection(firestore, "books", bookID, "orders");
+    return await getDocs(docRef);
+  };
+
+  // veriable to check logged in user
   const isSignedin = user ? true : false;
+
   return (
     <FirebaseContext.Provider
       value={{
@@ -99,6 +146,10 @@ export const FirebaseProvider = (props) => {
         getListingData,
         getImageURL,
         getDocByID,
+        getBooksByQuery,
+        placeBookOrder,
+        getOrdersByID,
+        user,
       }}>
       {props.children}
     </FirebaseContext.Provider>

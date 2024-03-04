@@ -14,6 +14,8 @@ import SignIn from "./pages/SignIn";
 import ListingPage from "./pages/ListingPage";
 import HomePage from "./pages/HomePage";
 import BookDetails from "./pages/BookDetails";
+import ViewOrders from "./pages/ViewOrders";
+import OrderDetails from "./pages/OrderDetails";
 
 const App = () => {
   return (
@@ -33,12 +35,20 @@ const App = () => {
           element={<SignIn />}
         />
         <Route
-          path='/book/list'
+          path='/books/list'
           element={<ListingPage />}
         />
         <Route
-          path='/book/:bookId'
+          path='/books/:bookId'
           element={<BookDetails />}
+        />
+        <Route
+          path='/books/orders'
+          element={<ViewOrders />}
+        />
+        <Route
+          path='/books/orders/:bookId'
+          element={<OrderDetails />}
         />
       </Routes>
     </div>
