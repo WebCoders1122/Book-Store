@@ -13,7 +13,7 @@ const BookCard = ({ book, id, link }) => {
   }, []);
   return (
     <Card
-      style={{ width: "18rem", minWidth: "30%" }}
+      style={{ width: "18rem", minWidth: "30%", maxWidth: "40%" }}
       className='m-5'>
       <Card.Img
         variant='top'

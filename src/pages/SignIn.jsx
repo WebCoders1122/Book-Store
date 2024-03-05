@@ -14,7 +14,7 @@ const SignIn = () => {
 
   //   firebase context
   const firebase = useFirebase();
-  console.log(firebase.isSignedin);
+  // console.log(firebase.isSignedin);
 
   //FOR LOG in actions
   const navigate = useNavigate();

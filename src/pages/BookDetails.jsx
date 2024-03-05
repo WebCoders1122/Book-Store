@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useFirebase } from "../context/Firebase";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 //bootstrap imports
 import { Button } from "react-bootstrap";
@@ -15,6 +16,9 @@ const BookDetails = () => {
   //firebase hook and parameters by react router dom
   const firebase = useFirebase();
   const params = useParams();
+
+  //navigation to home
+  const navigate = useNavigate();
 
   // for getting book details
   useEffect(() => {
@@ -34,6 +38,12 @@ const BookDetails = () => {
   const [quantity, setQuantity] = useState(0);
   const handleOrder = () => {
     let result = firebase.placeBookOrder(params.bookId, quantity);
+    result.then(() => {
+      alert("Your Order is Placed for " + quantity + " books.");
+      setTimeout(() => {
+        navigate("/");
+      }, 100);
+    });
   };
 
   // conditional rendering of book detail page
